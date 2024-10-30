@@ -1,61 +1,52 @@
-| Supported Targets | ESP32 | ESP32-C2 | ESP32-C3 | ESP32-C6 | ESP32-H2 | ESP32-S3 |
-| ----------------- | ----- | -------- | -------- | -------- | -------- | -------- |
+## ESP32-ble_ancs - `ble_ancs`
+## ขั้นตอนการใช้งาน
+1. เริ่มต้นโดยการเลือกตัวอย่าง `ble_ancs`
+# ![Screenshot 2024-10-30 212243](https://github.com/user-attachments/assets/c4b21a63-6937-417d-b783-571a04332518)
 
-# ESP-IDF BLE ANCS Example
+# ![Screenshot 2024-10-30 212250](https://github.com/user-attachments/assets/c4ee75c5-f7bc-408c-ada0-83d3486013c0)
 
-The purpose of the Apple Notification Center Service (ANCS) is to give Bluetooth accessories (that connect to iOS devices through a Bluetooth low-energy link) a simple and convenient way to access many kinds of notifications that are generated on iOS devices.
 
-## How to Use Example
+2. หลังจากเลือกตัวอย่างแล้ว ให้กดปุ่ม **Create**
+# ![Screenshot 2024-10-30 212255](https://github.com/user-attachments/assets/dcc0fc1a-8822-410a-9d9c-10278ba9b2ec)
 
-Before project configuration and build, be sure to set the correct chip target using:
 
-```bash
-idf.py set-target <chip_name>
+
+3. ตรวจสอบโค้ดในไฟล์ ` ble_ancs_demo.c` สามารถแก้ไขเป็นชื่อบูลทูธของตัวเองที่ต้องการ เพราะจะได้เชื่อมต่อได้อย่างถูกต้อง
+# ![Screenshot 2024-10-30 212349](https://github.com/user-attachments/assets/ba79c76f-735c-4c31-b217-ff71c0e8daee)
+# ![image](https://github.com/user-attachments/assets/617d6d5a-8574-4b74-b34b-e0701688ab25)
+
+เเก้ไขซึ่งสามารถตั้งชื่อให้กับอุปกรณ์ที่จะเชื่อมต่อได้
+```
+#define BLE_ANCS_TAG    "BLE_ANCS"
+#define EXAMPLE_DEVICE_NAME   "ESP_BLE_ANCS_TEEPOP109"
 ```
 
-The Apple Notification Center Service is a primary service whose service UUID is:
+ตัวอย่างการเเก้ไขดังนี้
+# ![Screenshot 2024-10-30 212407](https://github.com/user-attachments/assets/621a9562-360a-4da9-9b86-e5a3e675ede4)
 
-`7905F431-B5CE-4E99-A40F-4B1E122D00D0`
 
-Only one instance of the ANCS may be present on an NP. Due to the nature of iOS, the ANCS is not guaranteed to always be present. As a result, the NC should look for and subscribe to the Service Changed characteristic of the GATT service in order to monitor for the potential publishing and unpublishing of the ANCS at any time.
 
-In its basic form, the ANCS exposes three characteristics:
-Notification Source: UUID `9FBF120D-6301-42D9-8C58-25E699A21DBD` (notifiable)
-Control Point: UUID `69D1D8F3-45E1-49A8-9821-9BBDFDAAD9D9` (writeable with response)
-Data Source: UUID `22EAC6E9-24D6-4BB5-BE44-B36ACE7C7BFB` (notifiable)
+## กด Buildเเละรันโปรแกรม
 
-All these characteristics require authorization for access.
+กด Build และรันโปรแกรม จากนั้นเลือก **UART**
+# ![Screenshot 2024-10-30 212602](https://github.com/user-attachments/assets/71670eef-dd3d-4170-94e4-db44e386916f)
 
-### Hardware Required
+จะเเสดงสถานะการทำงาน
+# ![Screenshot 2024-10-30 212704](https://github.com/user-attachments/assets/6e31294d-060d-43fa-acee-f03a4fc4d68f)
 
-* A development board with ESP32/ESP32-C3/ESP32-H2/ESP32-C2/ESP32-S3 SoC (e.g., ESP32-DevKitC, ESP-WROVER-KIT, etc.)
-* A USB cable for power supply and programming
+จากนั้นจะเจอบูลทูธที่เรากำหนดไว้ ซึ่งเรากำหนดไว้ว่า " ESP_BLE_ANCS_TEEPOP109 "
+ผลลัพธ์จะมีลักษณะดังนี้:
+# ![image](https://github.com/user-attachments/assets/98026014-119f-4a83-818e-429c9a1cd88b)
 
-See [Development Boards](https://www.espressif.com/en/products/devkits) for more information about it.
+## ทดลองโดยให้เชื่อม Bluetooth กับอุปกรณ์ของ IOS ที่มี
+# ![image](https://github.com/user-attachments/assets/b621cede-5e34-4d42-8d68-7b729f7fd9f8)
+# ![image](https://github.com/user-attachments/assets/950c16c8-4d4b-4cf8-b1d7-0b97fe4488e9)
 
-### Build and Flash
+จะเเสดงสถานะการทำงานใน Serail Moniter จะมีการแจ้งว่าเกิดการเชื่อมต่อโดย
+# ![Screenshot 2024-10-30 212741](https://github.com/user-attachments/assets/d6d9bf11-c6a9-4d79-b646-3b1ef2032e27)
 
-Run `idf.py -p PORT flash monitor` to build, flash and monitor the project.
+ผลการทำงานจะพบว่าจะแจ้งว่ามีการแจ้งเตือนอะไรที่เกิดขึ้นในอุปกรณ์ IOS ที่เชื่อมต่อ
+# ![Screenshot 2024-10-30 212952](https://github.com/user-attachments/assets/3eb53d4f-e5af-4bcb-8965-d447eaa54722)
 
-(To exit the serial monitor, type ``Ctrl-]``.)
-
-See the [Getting Started Guide](https://idf.espressif.com/) for full steps to configure and use ESP-IDF to build projects.
-
-## Example Output
-
-```
-I (0) cpu_start: Starting scheduler on APP CPU.
-I (558) BTDM_INIT: BT controller compile version [1342a48]
-I (568) system_api: Base MAC address is not set
-I (568) system_api: read default base MAC address from EFUSE
-I (568) phy_init: phy_version 4670,719f9f6,Feb 18 2021,17:07:07
-I (918) BLE_ANCS: app_main init bluetooth
-I (1018) BLE_ANCS: REG_EVT
-E (1028) BT_BTM: BTM_BleConfigLocalIcon
-
-I (1058) BLE_ANCS: advertising start success
-```
-
-## Troubleshooting
-
-For any technical queries, please open an [issue](https://github.com/espressif/esp-idf/issues) on GitHub. We will get back to you soon.
+### สรุปการทดลอง
+ble_ancs หรือ Bluetooth Low Energy Apple Notification Center Service เป็นบริการ BLE ที่ถูกออกแบบโดย Apple เพื่อให้แอปพลิเคชันบนอุปกรณ์ต่าง ๆ (เช่น ESP32) สามารถเชื่อมต่อกับ iOS เพื่อรับการแจ้งเตือนจากศูนย์แจ้งเตือนของ iPhone หรือ iPad ได้ เช่น การแจ้งเตือนข้อความ อีเมล สายโทรเข้า เป็นต้น
